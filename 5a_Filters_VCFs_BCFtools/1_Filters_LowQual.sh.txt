@@ -1,0 +1,51 @@
+#!/bin/sh
+#SBATCH --clusters=mesopsl1
+#SBATCH --account=gay
+#SBATCH --partition=def
+#SBATCH --qos=mesopsl1_def_long
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=10
+#SBATCH --job-name=Filtre_capture_DP300_norepeat
+#SBATCH --time=48:00:00
+#SBATCH -o Filter_capture_DP300_norepeat.o
+#SBATCH -e Filter_capture_DP300_norepeat.e
+
+#==================#
+# Load Directories
+#==================#
+# Input="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/VCF_Filters/Capture_214_concat_GATK_TAG.vcf.gz"
+Input="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/VCF_Filters/Capture_214_concat_GATK_TAG_DP300.vcf.gz"
+Basename="VCF_214_capture_DP300"
+
+# IMPORT MODULE
+module load gcc/9.2.0
+module load samtools/1.10
+module load gatk/4.2.0.0
+
+
+#------------------------------------------------------------#
+# Discard LowQual position : Repeat / MQFilter / LowQual
+# Discard Indels
+# Discard Repeat
+#------------------------------------------------------------#
+# get header :
+bcftools view ${Input} | head -n762 >> ${Basename}_GATK_TAG_DP300.header
+
+# filter low qual and indel
+bcftools view -H ${Input} | grep -v "MQFILTER\|LowQual" |  awk '!($5 ~ "^*")' | awk '!($5 ~ "^[ACGT*].")' | awk '!($4 ~ "^[ACGT*].")' >> ${Basename}_GATK_TAG_Flowqual_Noindels_Temp.vcf
+
+# add header
+cat ${Basename}_GATK_TAG_DP300.header ${Basename}_GATK_TAG_Flowqual_Noindels_Temp.vcf >> ${Basename}_GATK_TAG_Flowqual_Noindels.vcf
+
+# zip vcf
+bcftools view ${Basename}_GATK_TAG_Flowqual_Noindels.vcf -o ${Basename}_GATK_TAG_Flowqual_Noindels.vcf.gz -Oz
+
+# index vcf
+bcftools index ${Basename}_GATK_TAG_Flowqual_Noindels.vcf.gz
+
+
+# rm temp file
+rm ${Basename}_GATK_TAG_Flowqual_Noindels_Temp.vcf ${Basename}_GATK_TAG_Flowqual_Noindels.vcf
+
+# get only SNP
+bcftools view -v snps VCF_214_capture_DP300_GATK_TAG_Flowqual_Noindels.vcf.gz -o VCF_214_capture_DP300_GATK_TAG_Flowqual_Noindels_SNP.vcf.gz -Oz

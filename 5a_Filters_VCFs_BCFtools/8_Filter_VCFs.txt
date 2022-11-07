@@ -1,0 +1,268 @@
+#!/usr/bin/bash
+#SBATCH --clusters=mesopsl1
+#SBATCH --account=gay
+#SBATCH --partition=def
+#SBATCH --qos=mesopsl1_def_long
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=10
+#SBATCH --job-name=filters
+#SBATCH --time=10:00:00
+#SBATCH -o filters_SFS_GWShark_o
+#SBATCH -e filters_SFS_GWShark_e
+
+# IMPORT MODULE
+module load gcc/9.2.0
+module load samtools/1.10
+module load gatk/4.2.0.0
+
+#==================================#
+# Create a filtered vcf
+#==================================#
+if [ "$1" == "-h" ] ; then
+    echo "Usage: `basename $0` [-h]
+        Required (to use on cluster PSL)
+
+        gcc/9.2.0
+        samtools/1.10
+        Bcftools
+
+        To fill directly in the script
+
+        Lunch the script
+        sbatch FILTERs_VCFs.sh
+
+        #----------------------#
+        # fill Input file name
+        #----------------------#
+
+        # output from the GATK.TAG_filter script
+        Input_TAG='XX.vcf.gz'
+
+        #-------------#
+        # final output
+        #-------------#
+        output_clean_Missing_Het_zip='XX_R_MQ_LQ_INDEL_BiSNP_MAFXX_Missing_XXhet.vcf.gz'
+        Called_position = all called position after removed Repeat , LowQual, INDEL and all position with missing data
+        Indels_LowQ_Repeat_positions_SMC++.bed = Bed file with Repeat , LowQual, INDEL position. Use in SMC++ analysis
+
+        #----------------------#
+        # fill your paramters
+        #----------------------#
+        Ind_List=('13 20 21 16 14 15 12 10 11 18 17 19') # col number of ind in vcf.
+        Pop_list=('13 20 21' '16 14 15' '12 10 11' '18 17 19') # col number of ind listed by pop in each ''
+
+        # Max_het  (int) : nb of heterozygous genotype per site allowed. Computed with filter_het.sh script.
+        # Usually rate of 80% of heterozygous genotype per site for SFS based analysis
+        Max_het=10
+
+        # MAF : Float, min freq to include site
+        # If SFS analysis set MAF to '0.0' (accept all low frequency allele)
+        MAF=0.05
+
+        # Max_missing_all (int or 'Na') : Freq of genotype called in all individu. Compute with vcftools
+        # 0=100% missing data allowed per site (SFS analysis)
+        # 0.2=20% missing data allowed per site (usually in structure analyse)
+        # 1= 0% missing data allowed,
+        # 'NA' = arg not used
+        Max_missing_all=1
+
+        # Max_missing_per_pop (int or 'Na') : Max missing genotype per pop (absolute nb). Put 'Na' if note used. Computed with 'filter_missing.sh' script
+        # Conflict output with Max_missing_all
+        Max_missing_per_pop=1
+        "
+    exit 0
+fi
+
+#=======================#
+# INPUTs / Output / Arg
+#=======================#
+
+        #----------------------#
+        # fill your paramters
+        #----------------------#
+        # Ind_List : list of column in vcf corresponding to your samples
+        Ind_List=$(echo $(seq 10 67))
+        Pop_list=("" "" "" "")
+
+        # Max_het  (int) : nb of heterozygous genotype per site allowed. Computed with filter_het.sh script.
+        # Usually rate of 80% of heterozygous genotype per site for SFS based analysis
+        Max_het=46
+
+        # MAF : Float, min freq to include site
+        # If SFS analysis set MAF to '0.0' (accept all low frequency allele)
+        MAF="0.0"
+
+        # Max_missing_all (int or 'Na') : Freq of genotype called in all individu. Compute with vcftools
+        # 0=100% missing data allowed per site (SFS analysis)
+        # 0.2=80% missing data allowed per site (usually in structure analyse)
+        # 1= 0% missing data allowed,
+        # 'NA' = arg not used
+        Max_missing_all=1
+
+        # Max_missing_per_pop (int or "Na") : Max missing genotype per pop (absolute nb). Put "Na" if note used. Computed with 'filter_missing.sh' script
+        # Conflict output with Max_missing_all
+        Max_missing_per_pop="Na"
+
+        #----------------------#
+        # File names
+        #----------------------#
+        PATH_results="/travail/egay/capture_analysis_GWS/Variant_Calling/subset_best_samples/BCFTools/VCF_Filters/"
+
+        # output from the GATK.filter script
+        Input_TAG=${PATH_results}"Capture_GWShark_TAG.vcf.gz"
+
+        # output after missing all ind filter
+        output_clean_missing=${Input_TAG::-10}"GATK_MQ_LQ_INDEL_BiSNP_MAF"${MAF}"_Missing"${Max_missing_all}".vcf.gz"
+        output_clean=${PATH_results}"SUPER_1_GATK_R_MQ_LQ_INDEL_BiSNP_MAF"${MAF}".vcf.gz"
+        # out after missing pop filter
+                #output_clean_Missing=${PATH_results}"SUPER_1_GATK_R_MQ_LQ_INDEL_BiSNP_MAF"${MAF}"_Pop_Missing"${Max_missing_per_pop}".vcf.gz"
+        # out after heterozygous fitler
+        output_clean_Missing_Het=${PATH_results}"SUPER_1_GATK_R_MQ_LQ_INDEL_BiSNP_MAF"${MAF}"_Missing_het"${Max_het}".vcf"
+
+        # final output
+        output_clean_Missing_Het_zip=${PATH_results}"SUPER_1_GATK_R_MQ_LQ_INDEL_BiSNP_MAF"${MAF}"_"${Max_missing_all}"Missing_het"${Max_het}".vcf.gz"
+
+#=====================================================================================#
+# create vector of all position filtered for indels / lowqual-repeat / Nomissing
+# Keep it for diversity computation
+#=====================================================================================#
+
+# create vcf with only qual position and no missing data
+bcftools view -V indels ${Input_TAG} | grep -v "MQFILTER\|LowQual\|Repeat" | awk '!($5 ~ "*")' | vcftools --vcf '-' --max-missing 1 --stdout --recode |bcftools view -H | awk '{print $2}' >> Called_position_GWScapture.vector
+
+#============================================================#
+# create bed file of all bad position for future use in SMC++
+#============================================================#
+#bcftools view -V indels ${Input_TAG} | grep -v "MQFILTER\|LowQual\|Repeat" | awk '!($5 ~ "*")' | awk '!(\$5 ~ "^[ACGT*].")' | awk '!(\$4 ~ "^[ACGT*].")' | bcftools view -H | cut -f1,2 >> Indels_LowQ_Repeat_positions_SMC++.bed
+
+#======================#
+# Run the hard filters
+#======================#
+
+if [[ "${Max_missing_all}" != "Na" ]] # if missing data are filtered on the whole individus set
+then
+        echo "filter missing data on whole ind"
+
+        echo "vcf filters applied :
+                                Indels
+                                LowQual & Repeat
+                                No monomorphic or tri-allelic site
+                                Max missing data : ${Max_missing_all}
+                                MAF = $MAF
+                                Max_het= $Max_het
+                                "
+
+        # 1. Discard Indels | LowQual & Repeat | keep SNP bi-allelic site | Missing data in all ind = x% | MAF = z
+        #----------------------------------------------------------------------------------------------------------#
+                bcftools view -V indels ${Input_TAG} | grep -v "MQFILTER\|LowQual\|Repeat" | awk '!($5 ~ "*")' | bcftools view -M2 -v snps -c1 | vcftools --vcf '-' --max-missing ${Max_missing_all} --stdout --recode | bcftools view -i "MAF>"${MAF} -o ${output_clean_missing} -Oz
+
+        # 3. run specific thresholf for heterozygous site data
+        #-----------------------------------------------------#
+                if [[ "${Max_het}" != "Na" ]]
+                then
+                echo "run heterozygous filters"
+
+        # Reads each line (position) of the vcf file and run the Max_missing_pop function for each line
+        #-----------------------------------------------------------------------------------------------#
+                gunzip ${output_clean_missing}
+                while read POS;
+                do
+                                nb_het=0
+                                for ind_col in $Ind_List
+                                                do
+                                                Position=`echo $POS | awk '{print $1,$2}'`
+                                                genotype=`echo $POS | awk -v col=$ind_col -F" " '{print $col}' | awk -F":" '{print $1}'`
+                                                if [ "${genotype}" == "0/1" ]
+                                                then
+                                                        nb_het=$(($nb_het + 1))
+                                                else
+                                                        continue
+                                                fi
+                                done
+                                if [ ${nb_het} -le ${Max_het} ]
+                                                then
+                                                echo "${POS}" >> $output_clean_Missing_Het
+                                                else
+                                                continue
+                                fi
+                done < ${output_clean_missing::-3}
+                else
+                        mv ${output_clean_missing::-3} $output_clean_Missing_Het
+                        echo "no heterozygous filter"
+                fi
+
+        # 4. index and get stat of final vcf
+        #------------------------------------#
+                rm ${output_clean_missing::-3}
+                bcftools view $output_clean_Missing_Het -o ${output_clean_Missing_Het_zip} -Oz
+                rm $output_clean_Missing_Het
+                bcftools stats ${output_clean_Missing_Het_zip} >> ${output_clean_Missing_Het}.stat
+
+
+elif [[ "${Max_missing_per_pop}" != "Na" ]] # if missing data are filtered per population
+then
+        echo "filter missing data per pop"
+        echo "vcf filters applied :
+                                Indels
+                                LowQual & Repeat
+                                No monomorphic or tri-allelic site
+                                Max missing data per population : ${Max_missing_per_pop}
+                                MAF = $MAF
+                                Max_het= $Max_het
+                                "
+        # 1. Discard Indels | LowQual & Repeat | keep SNP bi-allelic site | MAF > z
+        #---------------------------------------------------------------------------#
+        bcftools view -V indels ${Input_TAG} | grep -v "MQFILTER\|LowQual\|Repeat" | awk '!($5 ~ "*")' | bcftools view -M2 -v snps -c1 | bcftools view -i "MAF>0.05" -o ${output_clean} -Oz
+
+        # 2. Filter only appropriate rate of missing data per population
+        #----------------------------------------------------------------#
+        # See 'help' of the function "sh filter_missing.sh -h" if needed
+
+                # a. decompress vfc file
+                gunzip ${output_clean}
+
+                # b. run specific thresholf for missing data
+                sh filter_missing.sh ${output_clean::-3} $Max_missing_per_pop $output_clean_Missing $Pop_list
+
+        # 4. run specific thresholf for heterozygous site data
+        #-----------------------------------------------------#
+        if [[ "${Max_het}" != "Na" ]]
+                then
+                echo "run het filters"
+
+                # Reads each line (position) of the vcf file and run the Max_missing_pop function for each line
+                #-----------------------------------------------------------------------------------------------#
+                while read POS;
+                do
+                                nb_het=0
+                                for ind_col in $Ind_List
+                                                do
+                                                Position=`echo $POS | awk '{print $1,$2}'`
+                                                genotype=`echo $POS | awk -v col=$ind_col -F" " '{print $col}' | awk -F":" '{print $1}'`
+                                                if [ "${genotype}" == "0/1" ]
+                                                then
+                                                        nb_het=$(($nb_het + 1))
+                                                else
+                                                        continue
+                                                fi
+                                done
+                                if [ ${nb_het} -le ${Max_het} ]
+                                                then
+                                                echo "${POS}" >> $output_clean_Missing_Het
+                                                else
+                                                continue
+                                fi
+                done < ${output_clean_Missing}
+                else
+                        mv ${output_clean::-3} $output_clean_Missing_Het
+                        echo "No het filters"
+                fi
+
+        # 5. index and get stat of final vcf
+        #-----------------------------------#
+        rm ${output_clean::-3}
+        bcftools view $output_clean_Missing_Het -o $output_clean_Missing_Het_zip -Oz
+        rm $output_clean_Missing_Het
+        bcftools stats ${output_clean_Missing_Het_zip} >> ${output_clean_Missing_Het_zip}.stat
+
+fi
