@@ -1,1 +1,23 @@
+#===========================================#
+# 02/2022
+# Elise GAY
+# Run FastQC
+# please inform the authors before sharing
+#===========================================#
 
+# Aim : 
+#------#
+Run fastqc on list of fastq files
+
+# Input :
+#----------#
+fastq file (zipped or not) from a directory
+
+# Methods :
+#----------#
+Use FASTQC tool with default paramters
+Adatped for Genotoul cluster with SLURM command
+
+# output :
+#----------#
+FSTQC basic outputs 
