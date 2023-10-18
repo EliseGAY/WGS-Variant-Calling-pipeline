@@ -15,9 +15,6 @@ DIR_samples="/work/egay/white_shark_project/data/raw_fastq/samples/"
 Trimmomatic="/usr/local/bioinfo/src/Trimmomatic/Trimmomatic-0.38/trimmomatic.jar"
 
 # Absolute Path of adapter.fasta file. 
-# Adapter.fasta is a fasta file containing the adapters sequences. These seq depend on the sequencing technology. 
-# For Illumina-PE look at the fasta file proposed by the software trimmomatic itself. Or re-create a fasta file with the seq you want. 
-# Look in the FASTQC results can be usefull to detect the type of adapters you have in your fastq
 Adapter="/work/egay/white_shark_project/samples_mapping/TRIMMING_DATA_test2/adapt.fasta"
 
 #=============#
