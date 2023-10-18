@@ -1,1 +1,30 @@
+#==================#
+# 02/2022
+# Elise GAY
+# Run TRIMMOMATIC
+# please inform the authors before sharing
+#==================#
+
+# Aim : 
+#------#
+Trim illumina sequences
+
+# Input :
+#----------#
+
+R1 and R2 fastq.gz files
+Adapter file : a file with adapter sequence in fasta format 
+  Adapter.fasta is a fasta file containing the adapters sequences. These seq depend on the sequencing technology. 
+  For Illumina-PE look at the fasta file proposed by the software trimmomatic itself. Or re-create a fasta file with the seq you want. 
+  Look in the FASTQC results can be usefull to detect the type of adapters you have in your fastq
+
+# Methods :
+#----------#
+Trimmomatic 
+Parameters are standard for paried-end illumina sequence : ILLUMINACLIP:${Adapter}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:100 LEADING:3 TRAILING:3
+Adatped for Genotoul cluster with SLURM command
+
+# output :
+#----------#
+4 fastq.gz files (paired_R1/R2 ; unpaired_R1/R2) + one report for each samples trimmed
 
