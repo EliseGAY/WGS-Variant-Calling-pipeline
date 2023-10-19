@@ -9,8 +9,8 @@
 #------#
 Run variant calling with GATK on list of samples
 
-# Input :
-#----------#
+# Input (see details format in the sh script) :
+#-----------------------------------------------#
 list of sample
 BAM files obtained from mapping step
 Intervall_list : file with chromosome (or loci, or scaffold..) names
