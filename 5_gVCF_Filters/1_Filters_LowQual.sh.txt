@@ -1,0 +1,77 @@
+#!/bin/bash/
+
+#==================#
+# Load Directories
+#==================#
+
+interval_list="/travail/egay/Whole_Genome_analysis_GWS/GATK/GATK_23samples/VCF_Final/VCF_Filters/interval.list"
+
+#=======================#
+# loop on chr
+#=======================#
+while read chr;
+ do
+
+#==================#
+# Create variables
+#==================#
+
+Input="/travail/egay/Whole_Genome_analysis_GWS/GATK/GATK_23samples/VCF_Final/${chr}_GATK_TAG.vcf.gz"
+Basename="WGS_23_${chr}"
+
+#========================================#
+# Write on script for each chr.vcf files
+#========================================#
+        cat > ${chr}_Filters_pos.sh << EOF
+#!/bin/sh
+#SBATCH --clusters=mesopsl1
+#SBATCH --account=gay
+#SBATCH --partition=def
+#SBATCH --qos=mesopsl1_def_long
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=10
+#SBATCH --job-name=${chr}_pos
+#SBATCH --time=48:00:00
+#SBATCH -o ${chr}_filters.o
+#SBATCH -e ${chr}_filters.e
+
+# IMPORT MODULE
+module load gcc/9.2.0
+module load samtools/1.10
+module load gatk/4.2.0.0
+
+#------------------------------------------------------------#
+# Discard LowQual position : Repeat / MQFilter / LowQual
+# Discard Indels
+# Discard Repeat
+#------------------------------------------------------------#
+# get header :
+bcftools view ${Input} | grep "#" >> ${Basename}_GATK.header
+
+# filter low qual and indel
+bcftools view -H ${Input} | grep -v "MQFILTER\|LowQual\|Repeat" |  awk '!(\$5 ~ "^*")' | awk '!(\$5 ~ "^[ACGT*].")' | awk '!(\$4 ~ "^[ACGT*].")' >> ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_Temp.vcf
+
+# add header
+cat ${Basename}_GATK.header ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_Temp.vcf >> ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf
+
+# zip vcf
+bcftools view ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf -o ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz -Oz
+
+# get position vector on all positions with no NA
+bcftools view ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz | vcftools --vcf '-' --max-missing 1 --stdout --recode |grep -v "#" | cut -f1,2 >> ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_NoNa.positions
+# get VCF with no NA
+bcftools view ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz | vcftools --vcf '-' --max-missing 1 --stdout --recode | bcftools view -o ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_NoNa.vcf.gz -Oz
+
+# rm temp file
+rm ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_Temp.vcf ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf
+
+# get only SNP
+bcftools view -v snps ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz -o ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz -Oz
+
+# index vcf
+bcftools index ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz
+bcftools index ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz
+bcftools index ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_NoNa.vcf.gz
+EOF
+        sbatch ${chr}_Filters_pos.sh
+done < ${interval_list}
