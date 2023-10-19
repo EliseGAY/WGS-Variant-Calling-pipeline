@@ -1,1 +1,31 @@
+#======================#
+# 02/2022
+# Elise GAY
+# Run Variant Calling
+# please inform the authors before sharing
+#======================#
 
+# Aim : 
+#------#
+Run variant calling with GATK on list of samples
+
+# Input :
+#----------#
+list of sample
+BAM files obtained from mapping step
+Intervall_list : file with chromosome (or loci, or scaffold..) names
+Reference genome path
+
+# Methods :
+#----------#
+1. haplotypecaller_gatk.sh
+Run the calling for each sample provided in the list. The loop launch a job on the cluster for each samples.
+
+2. VC_allgenome or VC_loop_chromosome : Choose to run script either by chromosome (usefull on large genome) or on the complete genome at once
+	Look at the readme in each folder to see how to run the pipeline
+
+# output :
+#----------#
+
+A folder is created for each samples "samplesX_step1_variantcalling" 
+A "${name}_gatk.vcf.gz" is created in each folder
