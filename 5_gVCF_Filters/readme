@@ -1,1 +1,25 @@
+#======================#
+# 02/2022
+# Elise GAY
+# Run Filters on gVCF
+# please inform the authors before sharing
+#======================#
 
+# Aim : 
+#------#
+Run filters on gVCF with BCFTools
+
+# Input :
+#----------#
+gVCF tagged
+
+# Methods :
+#----------#
+run one job by chromosome : get each gVCF by loopoing on chromosome list
+Get several vcf by filtering fo quality, SNP etc.. 
+
+# output :
+#----------#
+# VCF with all clean position : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz
+# VCF with SNP clean position : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz
+# VCF with SNP clean position with no NA : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_NoNa.vcf.gz
