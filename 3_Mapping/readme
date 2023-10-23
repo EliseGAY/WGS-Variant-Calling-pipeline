@@ -29,7 +29,7 @@ Script adapted to run on the PSL cluster
 	
 	- Mapping with BWA
 	- sorting by coordinates with samtools
-	- mark duplaicted read with PICARD
+	- mark duplicated read with PICARD
 	- get several statistic with samtools 
 
 (optional) 3. Add_sample_ID.sh
