@@ -24,6 +24,11 @@ Trimmomatic
 Parameters are standard for paried-end illumina sequence : ILLUMINACLIP:${Adapter}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:100 LEADING:3 TRAILING:3
 Adatped for Genotoul cluster with SLURM command
 
+How to run the script on the cluster : 
+sh  trim.sh
+note that the "sbatch script.sh" command to run slumr script on each sample is comprised inside the script "trim.sh" itself (line 
+
+
 # output :
 #----------#
 4 fastq.gz files (paired_R1/R2 ; unpaired_R1/R2) + one report for each samples trimmed
