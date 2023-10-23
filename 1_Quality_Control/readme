@@ -17,6 +17,9 @@ fastq file (zipped or not) from a directory
 #----------#
 Use FASTQC tool with default paramters
 Adatped for Genotoul cluster with SLURM command
+How to run the script on the cluster : 
+sh fastqc.sh
+note that the "sbatch" to run fastqc on each sample is comprised inside the script "fastqc.sh" itself
 
 # output :
 #----------#
