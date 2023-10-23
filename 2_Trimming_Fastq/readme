@@ -26,7 +26,7 @@ Adatped for Genotoul cluster with SLURM command
 
 How to run the script on the cluster : 
 sh  trim.sh
-note that the "sbatch script.sh" command to run slumr script on each sample is comprised inside the script "trim.sh" itself (line 53)
+note that the "sbatch script.sh" command to run one slurm script on each sample is comprised inside the script "trim.sh" itself (line 53)
 
 
 # output :
