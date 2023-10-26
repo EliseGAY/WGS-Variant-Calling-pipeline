@@ -1,8 +1,9 @@
 #===============================#
-#### WGS-Variant-Calling-pipeline
-#### Elise GAY  - MNHN - EPHE
-#### Romuald Laso-Jadart - MNHN - EPHE
+##### WGS-Variant-Calling-pipeline
+##### Elise GAY  - MNHN - EPHE
+##### Romuald Laso-Jadart - MNHN - EPHE
 #================================#
+
 This pipeline aim to run a variant calling on Whole Genome Sequencing data from the quality check of Fastq file to the VCF filtering.
 
 All scripts are adapted to be run on supercalculator with SLURM scheduler.
