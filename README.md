@@ -16,5 +16,6 @@ Each folder contains generical scripts and a readme with information to run the 
 - 4_Variant_Calling_GATK : Variant Calling with GATK
 - 5_gVCF_Filters : Filtering of gVCF with GATK
 
- 
+Requierment : 
 
+FastQC / Trimmomatic / Samtools / BWA / Picard / GATK / BCFTools 
