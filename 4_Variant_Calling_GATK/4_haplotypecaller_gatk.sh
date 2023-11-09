@@ -56,7 +56,7 @@ module load samtools/1.10
 module load gatk/4.2.0.0
 
 # Run HaplotypeCaller / BP_RESOLUTION = option which print all the bases, not only variant bases
-
+# Add : --ploidy 1 \ option when haploide 
 gatk --java-options "-Xmx10g" HaplotypeCaller -ERC BP_RESOLUTION \
 -R ${Genome} \
 -I ${BAM} \
