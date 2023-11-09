@@ -80,7 +80,7 @@ gatk --java-options "-Xmx10g" VariantFiltration \
    -V ${VCF_Input} \
    -O ${VCF_Output} \
    --genotype-filter-name "DPFILTER" \ # Create filter name 'DPFILTER' 
-   --genotype-filter-expression "DP<10 ||  DP>260" \ # Tag each position with 10>depth<50 with "pass" and other with "DPFILTER" 
+   --genotype-filter-expression "DP<10 ||  DP>260" \ # Tag each position with 10>depth<50 with "pass" and other with "DPFILTER" . Divide by 2 when ploidy = 1
    --filter-name "MQFILTER" \ # ' Create filter name MQFILTER'
    --filter-expression "MQ < 30.0" \ # Tag each position with Mapping quality > 30 with "pass" and other with "MQFILTER" 
    --mask-name "Repeat" \ # Create "Repeat" tag 
