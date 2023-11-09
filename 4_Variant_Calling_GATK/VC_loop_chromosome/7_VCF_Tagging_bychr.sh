@@ -81,11 +81,11 @@ gatk VariantFiltration \
    -V ${VCF_Input_Dir}${chr}_GATK.vcf.gz \
    -O ${VCF_Output_Dir}${chr}_GATK_TAG.vcf.gz \
    --genotype-filter-name "DPFILTER" \
-   --genotype-filter-expression "DP<10 ||  DP>200" \
+   --genotype-filter-expression "DP<10 ||  DP>200" \ # adapt DP tag when ploidy = 1
    --mask-name "Repeat" \
    --mask ${Repeat} \
    --filter-name "MQFILTER" \
-   --filter-expression "MQ < 30.0" \
+   --filter-expression "MQ < 30.0" \ 
    --set-filtered-genotype-to-no-call true \
    --verbosity INFO
 EOF
