@@ -15,7 +15,8 @@ Each folder contains generical scripts and a readme with information to run the 
 - 3_Mapping : mapping and pre-process bam file with BWA, Picard and Samtools
 - 4_Variant_Calling_GATK : Variant Calling with GATK
 - 5_gVCF_Filters : Filtering of gVCF with GATK
-
+- 6_DP_NA_Filters : Vizualisatin and filters for sequencing depth and genotype frequencies on R.
+  
 Requierment : 
 
-FastQC / Trimmomatic / Samtools / BWA / Picard / GATK / BCFTools 
+FastQC / Trimmomatic / Samtools / BWA / Picard / GATK / BCFTools / R
