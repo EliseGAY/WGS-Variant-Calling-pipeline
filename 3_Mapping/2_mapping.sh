@@ -23,8 +23,8 @@ do
 	# INPUT FASTQ TRIMMED DIRECTORY
 	DIR_samples="/travail/egay/Whole_Genome_analysis_GWS/TRIMMING/"
 	# Absolute path of fastq_trimmed_R1/R2.fastq.gz files
-    fastq_R1=${DIR_samples}${name}_R1.trim.paired.fastq.gz
-    fastq_R2=${DIR_samples}${name}_R2.trim.paired.fastq.gz
+    	fastq_R1=${DIR_samples}${name}_R1.trim.paired.fastq.gz
+    	fastq_R2=${DIR_samples}${name}_R2.trim.paired.fastq.gz
 	
 	# PATH to the reference genome fasta file
 	Genome="/work/egay/white_shark_project/samples_mapping/MAPPING/index_genome_male/CarCar2.pri.cur.20210205.fasta"
@@ -65,7 +65,7 @@ samtools sort -l 6 -o ${name}.sorted.bam.gz -O bam -@ 20 ${name}.bam.gz
 
 # MARK DUPLICATES
 # Mark dupliacated reads
-java -Djava.io.tmpdir=${Temp_duplicates_folder} -jar /travail/egay/software/picard.jar MarkDuplicates \
+java -Djava.io.tmpdir=${Temp_duplicates_folder} -jar ${Picard} MarkDuplicates \
 I=${name}.sorted.bam.gz \
 M=metrics_duplicates.txt \
 O=${name}.sorted.duplicates.bam.gz \
