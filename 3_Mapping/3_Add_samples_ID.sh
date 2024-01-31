@@ -50,7 +50,7 @@ module load bioinfo/gatk-4.2.0.0
 module load bioinfo/samtools-1.9
 
 # Add samples ID in BAM file
-java -jar ${picard} AddOrReplaceReadGroups \
+java -jar ${Picard} AddOrReplaceReadGroups \
 I= ${BAM} \
 O= ${BAM_output}\
 RGID=${name} \
