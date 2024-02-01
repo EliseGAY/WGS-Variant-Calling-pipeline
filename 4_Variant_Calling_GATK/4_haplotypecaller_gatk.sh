@@ -13,7 +13,7 @@ do
         Local_PATH="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/"
 
         # Input bam file from mapping step
-        BAM="/travail/egay/capture_analysis_GWS/MAPPING/mapping_BAITS/${name}_mapping/${name}.sorted.duplicates_BAITS.bam.gz"
+        BAM="/travail/egay/capture_analysis_GWS/MAPPING/mapping_BAITS/${name}_mapping/${name}.sorted.duplicates.bam.gz"
 
         # Interval.list file
         # Interval list file contains all contig/chr/scaffold you want to do the calling on. Put all your contig name if you want to do the calling in all the genome
