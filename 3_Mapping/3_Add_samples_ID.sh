@@ -52,7 +52,7 @@ module load bioinfo/samtools-1.9
 # Add samples ID in BAM file
 java -jar ${Picard} AddOrReplaceReadGroups \
 I= ${BAM} \
-O= ${BAM_output}\
+O= ${BAM_output} \
 RGID=${name} \
 RGLB=lib1 \
 RGPL=ILLUMINA \
