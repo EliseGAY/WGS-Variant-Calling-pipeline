@@ -85,7 +85,7 @@ gatk VariantFiltration \
    --mask-name "Repeat" \
    --mask ${Repeat} \
    --filter-name "MQFILTER" \
-   --filter-expression "MQ < 30.0" \ 
+   --filter-expression "MQ < 30.0" \
    --set-filtered-genotype-to-no-call true \
    --verbosity INFO
 EOF
