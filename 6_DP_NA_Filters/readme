@@ -13,7 +13,7 @@ See the HTML file to see the example on rat's dataset on the Y haploid chromosom
 # Input :
 #----------#
 gVCF (generated with GATK)
-Function in the folder "R_functions_ploidy1"
+Function in the folder "R_functions_ploidy1" or "R_functions_ploidy2" : only the gneotype search "." or "./." changes
 
 # Methods :
 #----------#
