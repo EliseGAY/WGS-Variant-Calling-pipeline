@@ -1,0 +1,1 @@
+####     Example to run the filter on sexual chromosome (ploidy = 1)
