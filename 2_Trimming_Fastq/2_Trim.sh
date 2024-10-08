@@ -12,7 +12,7 @@ DIR_samples="/work/egay/white_shark_project/data/raw_fastq/samples/"
 
 # Absolute Path of the trimmomatic ".jar" file. 
 # Look at the documentation of your cluster. On genotoul, you need to call the absolute path of the '.jar' file. It depends on the soft management.
-Trimmomatic="/usr/local/bioinfo/src/Trimmomatic/Trimmomatic-0.38/trimmomatic.jar"
+Trimmomatic="/usr/local/bioinfo/src/Trimmomatic/Trimmomatic-0.39/trimmomatic.jar"
 
 # Absolute Path of adapter.fasta file. 
 Adapter="/work/egay/white_shark_project/samples_mapping/TRIMMING_DATA_test2/adapt.fasta"
