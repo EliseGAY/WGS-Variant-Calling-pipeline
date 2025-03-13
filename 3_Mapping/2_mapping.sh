@@ -56,12 +56,12 @@ module load samtools/1.10
 # MAPPING STEP
 # options :  -t (thread) -M (don't allow multiple mapping) -R (add tag "RGID" on reads : needed for GATK)
 # samtools : transform SAM in BAM
+
 /travail/egay/software/bwa-0.7.17/bwa mem -t 30 -M -R "@RG\tID:${name}_1\tSM:${sample_name}" "/travail/egay/Genome_Reference/CarCar2.pri.cur.20210205.fasta" ${fastq_R1} ${fastq_R2} | samtools view -bS -1 -h > ${name}.bam.gz
 
 # SORTING STEP
 # sort read by coordinate
 samtools sort -l 6 -o ${name}.sorted.bam.gz -O bam -@ 20 ${name}.bam.gz
-
 
 # MARK DUPLICATES
 # Mark dupliacated reads
