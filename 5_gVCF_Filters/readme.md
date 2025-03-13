@@ -50,31 +50,16 @@ Ensure that you have the following files prepared before running the script:
 
 To execute the script on the cluster, use the following command:
 
-`bash
+```
+bash
 sbatch filters_LowQual.sh
-`
-#======================#
-# 02/2022
-# Elise GAY
-# Run Filters on gVCF
-# please inform the authors before sharing
-#======================#
+```
 
-# Aim : 
-#------#
-Run filters on gVCF with BCFTools
+## 📤 output :
 
-# Input :
-#----------#
-gVCF tagged
+VCF with all clean position : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz
 
-# Methods :
-#----------#
-run one job by chromosome : get each gVCF by loopoing on chromosome list
-Get several vcf by filtering fo quality, SNP etc.. 
+VCF with SNP clean position : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz
 
-# output :
-#----------#
-# VCF with all clean position : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz
-# VCF with SNP clean position : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz
-# VCF with SNP clean position with no NA : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_NoNa.vcf.gz
+VCF with SNP clean position with no NA : ${Basename}_GATK_TAG_Flowqual_Noindels_Norepeat_NoNa.vcf.gz
+
