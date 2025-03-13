@@ -5,7 +5,7 @@
 #==================#
 
 # Example of VCF file after tagging each position with filters
-# passing variants are annotated as PASS and failing variants are annotated with the name(s) of the filter(s) they failed in the 7th column
+# Good variants are annotated as PASS and failing variants are annotated with the name(s) of the filter(s) they failed in the 7th column
 # Sample which not pass the DP filters at one position are genotyped "./." as missing data and tagged as "DPFILTER"
 '''
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  GN1430  GN1434  GN1436  GN17525 GN17582 GN17597 GN17608 GN17768 GN17774 GN17775 GN18404 GN18411
