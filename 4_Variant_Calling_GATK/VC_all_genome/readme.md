@@ -42,6 +42,13 @@ SUPER_3
 `Temp directory` = Path to temp directory
 
 `repeat` = path to repeat file in bed format
+📓Note :  
+'To obtain RepeatMasker output run the script 'Repeats_detection.sh''
+To get repeat.bed file from RepeatMasker output : run prealably in a separated script:
+`cut -f5,6,7 'genome.fasta.out' >> Repeats.bed`
+`bedtools sort -i Repeats.bed >> Repeats_sorted.bed`
+`index bed file with GATK IndexFeatureFile -I repeats.bed`
+
 
 ### 🛠 Methods
 
