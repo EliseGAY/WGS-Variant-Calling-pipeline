@@ -20,19 +20,16 @@ Trim Illumina sequences.
 ## 🛠 Methods  
 - Uses **Trimmomatic** with standard parameters for paired-end Illumina sequences:  
   ```plaintext
-  ILLUMINACLIP:${Adapter}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:100 LEADING:3 TRAILING:3
-```
+  ILLUMINACLIP:${Adapter}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:100 LEADING:3 TRAILING:3```
 Adapted for Genotoul cluster with SLURM command.
 To run the script on the cluster:
-```
-sh trim.sh
-```
+
+```sh trim.sh```
 
 Note: The command
-```
-    sbatch script.sh
-```
-    is included inside trim.sh itself (line 53) to run one SLURM script per sample.
+```sbatch script.sh```
+
+is included inside trim.sh itself (line 53) to run one SLURM script per sample.
 
 ##📤 Output
 Four FASTQ.gz files:
