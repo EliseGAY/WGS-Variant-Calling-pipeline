@@ -1,35 +1,48 @@
-#==================#
-# 02/2022
-# Elise GAY
-# Run TRIMMOMATIC
-# please inform the authors before sharing
-#==================#
+# Run TRIMMOMATIC  
 
-# Aim : 
-#------#
-Trim illumina sequences
+## Author  
+**Elise GAY**  
+📅 *02/2022*  
 
-# Input :
-#----------#
+> ⚠️ **Please inform the authors before sharing.**  
 
-R1 and R2 fastq.gz files
-Adapter file : a file with adapter sequence in fasta format 
-  Adapter.fasta is a fasta file containing the adapters sequences. These seq depend on the sequencing technology. 
-  For Illumina-PE look at the fasta file proposed by the software trimmomatic itself. Or re-create a fasta file with the seq you want. 
-  Look in the FASTQC results can be usefull to detect the type of adapters you have in your fastq
+---  
 
-# Methods :
-#----------#
-Trimmomatic 
-Parameters are standard for paried-end illumina sequence : ILLUMINACLIP:${Adapter}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:100 LEADING:3 TRAILING:3
-Adatped for Genotoul cluster with SLURM command
+## 📌 Aim  
+Trim Illumina sequences.  
 
-How to run the script on the cluster : 
-sh  trim.sh
-note that the "sbatch script.sh" command to run one slurm script on each sample is comprised inside the script "trim.sh" itself (line 53)
+## 📂 Input  
+- **R1 and R2 FASTQ.gz files**  
+- **Adapter file**: A FASTA file containing adapter sequences.  
+  - `Adapter.fasta` should contain the adapter sequences.  
+  - These sequences depend on the sequencing technology.  
+  - For **Illumina-PE**, you can use the FASTA file provided by Trimmomatic or create your own.  
+  - **Tip:** Look at the FASTQC results to detect the type of adapters in your FASTQ files.  
 
+## 🛠 Methods  
+- Uses **Trimmomatic** with standard parameters for paired-end Illumina sequences:  
+  ```plaintext
+  ILLUMINACLIP:${Adapter}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:100 LEADING:3 TRAILING:3
+```
+Adapted for Genotoul cluster with SLURM command.
+To run the script on the cluster:
+```
+sh trim.sh
+```
 
-# output :
-#----------#
-4 fastq.gz files (paired_R1/R2 ; unpaired_R1/R2) + one report for each samples trimmed
+Note: The command
+```
+    sbatch script.sh
+```
+    is included inside trim.sh itself (line 53) to run one SLURM script per sample.
+
+##📤 Output
+Four FASTQ.gz files:
+
+paired_R1.fastq.gz
+paired_R2.fastq.gz
+unpaired_R1.fastq.gz
+unpaired_R2.fastq.gz
+
+One trimming report per sample
 
