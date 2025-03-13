@@ -18,17 +18,18 @@ Fill the variables in the corresponding script :
 
 `sample map file` tab delimited column , no header :
 
-```sample1      /your_absolute_path/sample1.vcf.gz
+`  sample1      /your_absolute_path/sample1.vcf.gz
    sample2      /your_absolute_path/sample2.vcf.gz
-   sample3      /your_absolute_path/sample3.vcf.gz```
+   sample3      /your_absolute_path/sample3.vcf.gz
+`
 
 `Interval list` : file with chr name
 
 `DB` : Path to the DB database
 
-```SUPER_1
+`SUPER_1
 SUPER_2
-SUPER_3```
+SUPER_3`
 
 `Temp directory` = Path to temp directory
 
