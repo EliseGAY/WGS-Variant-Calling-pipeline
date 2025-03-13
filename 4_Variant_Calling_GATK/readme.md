@@ -1,4 +1,4 @@
-# Run TRIMMOMATIC  
+# Variant Calling
 
 ## Author  
 **Elise GAY**  
