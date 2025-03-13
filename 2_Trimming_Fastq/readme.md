@@ -4,8 +4,6 @@
 **Elise GAY**  
 📅 *02/2022*  
 
-> ⚠️ **Please inform the authors before sharing.**  
-
 ---  
 
 ## 📌 Aim  
