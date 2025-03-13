@@ -31,7 +31,7 @@ Note: The command
 
 is included inside trim.sh itself (line 53) to run one SLURM script per sample.
 
-##📤 Output
+## 📤 Output
 Four FASTQ.gz files:
 
 paired_R1.fastq.gz
