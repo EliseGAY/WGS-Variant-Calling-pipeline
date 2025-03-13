@@ -34,10 +34,10 @@ is included inside trim.sh itself (line 53) to run one SLURM script per sample.
 ## 📤 Output
 Four FASTQ.gz files:
 
-paired_R1.fastq.gz
-paired_R2.fastq.gz
-unpaired_R1.fastq.gz
-unpaired_R2.fastq.gz
+- paired_R1.fastq.gz
+- paired_R2.fastq.gz
+- unpaired_R1.fastq.gz
+- unpaired_R2.fastq.gz
 
 One trimming report per sample
 
