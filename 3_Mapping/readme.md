@@ -9,6 +9,10 @@
 ## 📌 Aim  
 Run BWA
 
+`1_index.sh`
+`1_mapping.sh`
+(optional) `1_Add_samples_ID.sh`
+
 ## 📂 Input  
 - **R1 and R2 Trimed.FASTQ.gz files**  
 - **One reference genome in fasta format**
@@ -16,90 +20,51 @@ Run BWA
 
 ## 🛠 Methods
 
-1. Genome indexation with bwa (needed before the mapping)
+*️⃣ Genome indexation with bwa (needed before the mapping)
+
+run : 
+
 `sbatch index.sh `
 
-2. Mapping : 
+*️⃣ Mapping : 
+
+Fill the several variables at the begining of the script (adapt variable declaration if necessary):
+
+`sample_name` = your list of sample
+`Local_PATH` = Root of working dir
+`Picard` = Path to Jar file
+`Temp_duplicates_folder` = Path to temp folder 
+`DIR_samples` = Path to bam files
+`fastq_R1` = R1 name
+`fastq_R2` = R2 name
+`Genome`  = Path to the folder containing the indexed genome
+
+run :
 
 `sh mapping.sh`
 
-Fill the several variables at the begining of the script (adapt variable declaration if necessary):
-`sample_name` = 
-`Local_PATH`
-`Picard`
-`Temp_duplicates_folder`
-`DIR_samples`
-`fastq_R1`
-`fastq_R2`
-`Genome`
+*️⃣ Steps by steps : 
 
-	The mapping.sh script run a loop on sample list and launch a job in the cluster for every iteration (every sample)
-	
-	- Mapping with BWA
-	- sorting by coordinates with samtools
-	- mark duplicated read with PICARD
-	- get several statistic with samtools 
+`sh mapping.sh` : Loop over the sample list and launch as much job as samples number
 
-(optional) 3. Add_sample_ID.sh
-only if : -R (add tag "RGID" on reads : needed for GATK) was not used in the mapping.sh script
+- Mapping with BWA
 
-```sh trim.sh```
+- sorting by coordinates with samtools
 
-Note: The command
-```sbatch script.sh```
+- mark duplicated read with PICARD
 
-is included inside trim.sh itself (line 53) to run one SLURM script per sample.
+- get several statistic with samtools 
+
+
 
 ## 📤 Output
-Four FASTQ.gz files:
 
-- paired_R1.fastq.gz
-- paired_R2.fastq.gz
-- unpaired_R1.fastq.gz
-- unpaired_R2.fastq.gz
+Indexed genome file
 
-One trimming report per sample
+Indexed final bam files : `${name}.sorted.duplicates.bam.gz` `${name}.sorted.duplicates.bam.bai` 
+
+Statistics on final bam : `${name}.bam.stats` and `${name}_metrics_coverage.txt`
 
 
 
 
-#==================#
-# 02/2022
-# Elise GAY
-# Run BWA
-# please inform the authors before sharing
-#==================#
-
-# Aim : 
-#------#
-Run mapping of illumina paired-end seuqences on whole reference genome
-
-# Input :
-#----------#
-One reference genome in fasta format
-R1 and R2 trimmed fastq.gz files
-Basename_samples : list of basename of your samples
-
-# Methods :
-#----------#
-Script adapted to run on the PSL cluster 
-
-1. index.sh 
-	genome indexation with bwa (needed before the mapping)
-
-2. mapping.sh
-	Fill the several variables at the begining of the script (sample_name, Local_PATH, Picard, Temp_duplicates_folder, DIR_samples, fastq_R1, fastq_R2, Genome)
-	The mapping.sh script run a loop on sample list and launch a job in the cluster for every iteration (every sample)
-	
-	- Mapping with BWA
-	- sorting by coordinates with samtools
-	- mark duplicated read with PICARD
-	- get several statistic with samtools 
-
-(optional) 3. Add_sample_ID.sh
-only if : -R (add tag "RGID" on reads : needed for GATK) was not used in the mapping.sh script
-
-# output :
-#----------#
-# indexed final bam files : "${name}.sorted.duplicates.bam.gz"
-# Statistics on final bam : ${name}.bam.stats and ${name}_metrics_coverage.txt
