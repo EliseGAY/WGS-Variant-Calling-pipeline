@@ -11,7 +11,7 @@ Run BWA
 
 `1_index.sh`
 `1_mapping.sh`
-(optional) `1_Add_samples_ID.sh`
+(optional) `3_Add_samples_ID.sh`
 
 ## 📂 Input  
 - **R1 and R2 Trimed.FASTQ.gz files**  
