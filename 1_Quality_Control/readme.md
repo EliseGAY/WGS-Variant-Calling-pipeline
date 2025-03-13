@@ -1,26 +1,23 @@
-#### ===========================================#
-#### 02/2022 #### 
-# Elise GAY
-# Run FastQC
-# please inform the authors before sharing
-#===========================================#
+# Run FastQC  
 
-# Aim : 
-#------#
-Run fastqc on list of fastq files
+## Author  
+**Elise GAY**  
+📅 *02/2022*  
 
-# Input :
-#----------#
-fastq file (zipped or not) from a directory
+> ⚠️ **Please inform the authors before sharing.**  
 
-# Methods :
-#----------#
-Use FASTQC tool with default paramters
-Adatped for Genotoul cluster with SLURM command
-How to run the script on the cluster : 
-sh  fastqc.sh
-note that the "sbatch script.sh" command to run one slurm script on each sample is comprised inside the script "fastqc.sh" itself (line 38)
+---
 
-# output :
-#----------#
-FSTQC basic outputs 
+## 📌 Aim  
+Run FastQC on a list of FASTQ files.  
+
+## 📂 Input  
+- FASTQ file (zipped or unzipped) from a directory.  
+
+## 🛠 Methods  
+- Uses **FASTQC** tool with default parameters.  
+- Adapted for **Genotoul** cluster with **SLURM** command.  
+- To run the script on the cluster:  
+  ```sh
+  sh fastqc.sh
+  
