@@ -24,58 +24,51 @@
 
 Filters_Het_Ind_Pos <- function(vfc, ploidy, rate_het_max_POS, rate_het_max_Ind, rate_het_min_pos) {
   
-  # Extract genotypes from the VCF based on the ploidy level
-  if (ploidy == 1) {
-    gt <- extract.gt(vfc, element = "GT", mask = FALSE, as.numeric = FALSE, return.alleles = FALSE, convertNA = FALSE, extract = TRUE)
-  } else if (ploidy == 2) {
-    gt <- extract.gt(vfc, element = "GT", mask = FALSE, as.numeric = FALSE, return.alleles = FALSE, convertNA = FALSE, extract = TRUE)
-  } else {
-    stop("Ploidy must be either 1 or 2")
-  }
-
-  # Calculate alternative allele rate for individuals (columns)
-  if (ploidy == 1) {
-    somme_het_ind <- colSums(gt == "1")
-  } else {
-    somme_het_ind <- colSums(gt == "0/1")
+  # Validate ploidy value
+  if (!ploidy %in% c(1, 2)) {
+    stop("Ploidy must be either 1 or 2.")
   }
   
-  rate_het_ind <- (somme_het_ind / dim(gt)[1]) * 100
+  # Define genotype pattern based on ploidy
+  het_pattern <- if (ploidy == 1) "1" else "0/1"
+  
+  # Extract genotypes from VCF
+  gt <- extract.gt(vfc, element = "GT", mask = FALSE, as.numeric = FALSE, return.alleles = FALSE, convertNA = FALSE)
+  
+  # Helper function to calculate alternative allele rate
+  calc_het_rate <- function(gt_data, pattern) {
+    rowSums(gt_data == pattern)
+  }
+  
+  # Calculate alternative allele rate for individuals (columns)
+  somme_het_ind <- calc_het_rate(gt, het_pattern)
+  rate_het_ind <- (somme_het_ind / nrow(gt)) * 100
   samples_kept <- names(rate_het_ind[rate_het_ind <= rate_het_max_Ind])
   
   # Filter VCF by individuals
   vcf_filtered_ind <- vfc[, c("FORMAT", samples_kept)]
-
-  # Extract genotypes for filtered VCF
-  gt_1 <- extract.gt(vcf_filtered_ind, element = "GT", mask = FALSE, as.numeric = FALSE, return.alleles = FALSE, convertNA = FALSE, extract = TRUE)
-
+  
+  # Re-extract genotypes for the filtered VCF
+  gt_1 <- extract.gt(vcf_filtered_ind, element = "GT", mask = FALSE, as.numeric = FALSE, return.alleles = FALSE, convertNA = FALSE)
+  
   # Calculate alternative allele count for positions (rows)
-  if (ploidy == 1) {
-    somme_het_pos <- rowSums(gt_1 == "1")
-  } else {
-    somme_het_pos <- rowSums(gt_1 == "0/1")
-  }
+  somme_het_pos <- calc_het_rate(gt_1, het_pattern)
   
-  pos_kept <- which(somme_het_pos >= rate_het_min_pos)
+  # Apply minimum threshold for alternative alleles at positions
+  pos_kept_min <- which(somme_het_pos >= rate_het_min_pos)
+  vcf_filtered_het_min <- vcf_filtered_ind[pos_kept_min, ]
   
-  # Filter VCF by positions with enough alternative alleles
-  vcf_filtered_het_min <- vcf_filtered_ind[pos_kept, ]
+  # Calculate the alternative allele rate for positions again after applying minimum threshold
+  gt_2 <- extract.gt(vcf_filtered_het_min, element = "GT", mask = FALSE, as.numeric = FALSE, return.alleles = FALSE, convertNA = FALSE)
+  somme_het_pos_final <- calc_het_rate(gt_2, het_pattern)
   
-  # Calculate alternative allele rate for positions (rows)
-  gt_1 <- extract.gt(vcf_filtered_het_min, element = "GT", mask = FALSE, as.numeric = FALSE, return.alleles = FALSE, convertNA = FALSE, extract = TRUE)
-  
-  if (ploidy == 1) {
-    somme_het_pos <- rowSums(gt_1 == "1")
-  } else {
-    somme_het_pos <- rowSums(gt_1 == "0/1")
-  }
-  
-  rate_het_pos <- (somme_het_pos / dim(gt_1)[2]) * 100
-  pos_kept <- which(rate_het_pos <= rate_het_max_POS)
+  # Calculate percentage and filter positions based on maximum allowed rate
+  rate_het_pos <- (somme_het_pos_final / ncol(gt_2)) * 100
+  pos_kept_max <- which(rate_het_pos <= rate_het_max_POS)
   
   # Final filtered VCF by both position and individual heterozygosity rates
-  vcf_filtered_het <- vcf_filtered_het_min[pos_kept, ]
+  vcf_filtered_het <- vcf_filtered_het_min[pos_kept_max, ]
   
-  # Return filtered VCF
+  # Return the filtered VCF
   return(vcf_filtered_het)
 }
