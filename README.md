@@ -1,22 +1,34 @@
-##### ===============================#
-##### WGS-Variant-Calling-pipeline
-##### Elise GAY  - MNHN - EPHE
-##### Romuald Laso-Jadart - MNHN - EPHE
-##### ================================#
+### WGS Variant Calling Pipeline
 
-This pipeline aim to run a variant calling on Whole Genome Sequencing data from the quality check of Fastq file to the VCF filtering.
+### Authors
+**Elise GAY** - MNHN - EPHE  
+**Romuald Laso-Jadart** - MNHN - EPHE  
 
-All scripts are adapted to be run on supercalculator with SLURM scheduler.
+### Overview
+This pipeline is designed to perform variant calling on Whole Genome Sequencing (WGS) data, from quality control of FASTQ files to VCF filtering. All scripts are optimized for execution on a supercomputer using the SLURM scheduler.
 
-Each folder contains generical scripts and a readme with information to run the step. 
+Each folder contains generic scripts and a `README.md` file with instructions for running the respective steps.
 
-- 1_Quality_Control : FASTQ quality check with fastqc
-- 2_Trimming_Fastq : Read trimming with trimmomatic
-- 3_Mapping : mapping and pre-process bam file with BWA, Picard and Samtools
-- 4_Variant_Calling_GATK : Variant Calling with GATK
-- 5_gVCF_Filters : Filtering of gVCF with GATK
-- 6_DP_NA_Filters : Vizualisatin and filters for sequencing depth and genotype frequencies on R.
-  
-Requierment : 
+### Pipeline Steps
+1. **Quality Control**: FASTQ quality check using `FastQC`
+2. **Trimming Fastq**: Read trimming using `Trimmomatic`
+3. **Mapping**: Mapping and BAM preprocessing using `BWA`, `Picard`, and `Samtools`
+4. **Variant Calling**: Variant calling using `GATK`
+  i. All genome at once
+  ii. Loop by chr for large genome
+6. **gVCF Filtering**: Filtering of gVCF files using `GATK`
+7. **Depth & Genotype Filters**: Visualization and filtering of sequencing depth and genotype frequencies using `R`
 
-FastQC / Trimmomatic / Samtools / BWA / Picard / GATK / BCFTools / R
+### Requirements
+Ensure the following dependencies are installed:
+- `FastQC`
+- `Trimmomatic`
+- `Samtools`
+- `BWA`
+- `Picard`
+- `GATK`
+- `BCFTools`
+- `R`
+
+### Usage
+Detailed instructions for running each step are available in the respective subdirectory `README.md` files. The pipeline is structured for high-performance computing environments using SLURM.
