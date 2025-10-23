@@ -22,16 +22,17 @@ module load gatk/4.2.0.0
 
 # Just as a reminder, those are paths to load in the GATK command #
 # folder of DBImport/DB : (with three /// at the begining) 
+# Do not use if you use combinegVCF
 DB="///travail/egay/capture_analysis_GWS/Variant_Calling/GATK/DB_Import/DB/"
 
-# Temporary path
+# Temporary path (optional if you have a OOM kill event)
 Temp_path="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Temp/"
 
 # PATH to the reference genome fasta file (masked or not masked)
 Genome="/travail/egay/Genome_Reference/CarCar2.pri.cur.20210205.fasta"
 
-# interval list (to be mentioned even if you do your calling on all your chr)
-interval_list="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/interval.list"
+# interval list (to be mentioned even if you do your calling on all your chr) : if you need to subset your vcf 
+interval_list="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/interval.list" 
 
 Output="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/VCF_214_samples_interval.vcf.gz"
 
@@ -44,8 +45,9 @@ mkdir "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Te
 
 gatk --java-options "-Xmx100g" GenotypeGVCFs \
 -R "/travail/egay/Genome_Reference/CarCar2.pri.cur.20210205.fasta" \
--V gendb:///travail/egay/capture_analysis_GWS/Variant_Calling/GATK/DB_Import/DB/ \
+-V gendb:///travail/egay/capture_analysis_GWS/Variant_Calling/GATK/DB_Import/DB/ \ # if you used CombinegVCF just give the absolute path of the all.VCF.gz
 -O "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/VCF_214_samples_interval.vcf.gz" \
---tmp-dir "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Temp/" \
+# --tmp-dir "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Temp/" \ # if needed
 --include-non-variant-sites true \
--L "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/interval.list"
+# -L "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/interval.list" # if you need to subset your vcf
+
