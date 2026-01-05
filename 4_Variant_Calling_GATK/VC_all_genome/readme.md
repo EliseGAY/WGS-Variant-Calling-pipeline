@@ -58,7 +58,7 @@ To get repeat.bed file from RepeatMasker output : run prealably in a separated s
 `index bed file with GATK IndexFeatureFile -I repeats.bed`
 
 
-### 🛠 Methods
+🛠 Methods
 
 *️⃣ Run the GenomicDBImport function of GATK : create a database needed for the genotyping step
 
@@ -69,7 +69,19 @@ To get repeat.bed file from RepeatMasker output : run prealably in a separated s
 - A DB folder, no need to go get the insight of the folders
 
 ### option 2 : CombineGVCF
+📂 Input :
 
+list of chr in `chr.list` file
+All vcf in one folder `vcf_input` using to search for vcf `vcf_input/*.vcf.gz`
+Genome_path `Genome` 
+current dir `PWD`
+
+🛠 Methods
+
+use the `Combinegvcf` function of GATK
+
+📤 Outputs :
+ All vcf
 
 ### Genrate the gvcf
 
@@ -86,6 +98,7 @@ To get repeat.bed file from RepeatMasker output : run prealably in a separated s
 📤 Outputs :
 
 - One gVCF with genotypes and quality tags 
+
 
 
 
