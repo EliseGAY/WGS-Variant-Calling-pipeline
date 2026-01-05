@@ -98,8 +98,6 @@ Briefly, to get the repeat bed file from repeatmakser output :
 
 `sed -i 's/ /\t/g' genome.fasta.Repeats.bed`
 
-`bedtools sort -i genome.fasta.Repeats.bed`
-
 `bedtools sort -i genome.fasta.Repeats.bed > genome.fasta.Repeats.sorted.bed`
 
 `bgzip genome.Repeat.sorted.bed`
@@ -112,6 +110,7 @@ Briefly, to get the repeat bed file from repeatmakser output :
 📤 Outputs :
 
 - One gVCF with genotypes and quality tags 
+
 
 
 
