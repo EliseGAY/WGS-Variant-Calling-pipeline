@@ -38,9 +38,3 @@ Gatk --java -jar CombineGVCFs \
 ${ListOfFiles} \
 # -L $CHR \ : if you want to do that by chromosome
 -O Cata_All.vcf.gz
-
-EOF
-
-sbatch combine_$CHR.sh
-cd $DIRECTORY
-done
