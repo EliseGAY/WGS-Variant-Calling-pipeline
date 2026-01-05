@@ -49,5 +49,7 @@ gatk --java-options "-Xmx100g" GenotypeGVCFs \
 -O "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/VCF_214_samples_interval.vcf.gz" \
 # --tmp-dir "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Temp/" \ # if needed
 --include-non-variant-sites true \
+--sample-ploidy 1 \
 # -L "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/interval.list" # if you need to subset your vcf
+
 
