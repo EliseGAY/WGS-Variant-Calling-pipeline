@@ -94,11 +94,16 @@ To obtain the repeat coordinate with RepeatMasker run the script `Repeats_detect
 
 Briefly, to get the repeat bed file from repeatmakser output :
 
-`cut -f5,6,7 'genome.fasta.out' >> Repeats.bed`
+`awk -F" " '{print $5,$6,$7}' genome.fasta.out | sed '1,2d' | sed '1d' >> genome.fasta.Repeats.bed`
 
-`bedtools sort -i Repeats.bed >> Repeats_sorted.bed`
+`sed -i 's/ /\t/g' genome.fasta.Repeats.bed`
 
-`index bed file with GATK IndexFeatureFile -I repeats.bed`
+`bedtools sort -i genome.fasta.Repeats.bed`
+
+`bedtools sort -i genome.fasta.Repeats.bed > genome.fasta.Repeats.sorted.bed`
+
+`bgzip genome.Repeat.sorted.bed`
+
 
 🛠 Methods :
 
@@ -107,6 +112,7 @@ Briefly, to get the repeat bed file from repeatmakser output :
 📤 Outputs :
 
 - One gVCF with genotypes and quality tags 
+
 
 
 
