@@ -10,9 +10,9 @@
 
 Create a gVCF file from all chr at once
 
-Two options with GATK : CombineGVCF of DBimport
+Two options with GATK : `CombineGVCF` or `DBimport`
 
-### option 1 : DBIMPORT 
+### STEP 1 option 1 : DBIMPORT 
 
 📂 Input (see details format in the sh script)
 
@@ -45,18 +45,6 @@ SUPER_3
 
 `Temp directory` = Path to temp directory
 
-`repeat` = path to repeat file in bed format
-
-📓Note :  
-
-To obtain RepeatMasker output run the script `Repeats_detection.sh` (check for repo)
-
-To get repeat.bed file from RepeatMasker output : run prealably in a separated script:
-
-`cut -f5,6,7 'genome.fasta.out' >> Repeats.bed`
-`bedtools sort -i Repeats.bed >> Repeats_sorted.bed`
-`index bed file with GATK IndexFeatureFile -I repeats.bed`
-
 
 🛠 Methods
 
@@ -68,7 +56,8 @@ To get repeat.bed file from RepeatMasker output : run prealably in a separated s
 
 - A DB folder, no need to go get the insight of the folders
 
-### option 2 : CombineGVCF
+### STEP 1 option 2 : CombineGVCF
+
 📂 Input :
 
 list of chr in `chr.list` file
@@ -83,7 +72,7 @@ use the `Combinegvcf` function of GATK
 📤 Outputs :
  All vcf
 
-### Genrate the gvcf
+### STEP 2 : Generate the gvcf
 
 `sh Genotype_gvcf_all_Chr.sh`
 
@@ -91,13 +80,32 @@ use the `Combinegvcf` function of GATK
 
 - One gVCF with genotypes
 
-*️⃣ Tag the position according to quality criteria
+### STEP 3 : Tag the position according to quality criteria
+
+📂 Input :
+
+Your gVCF path
+
+`repeat` = path to repeat file in bed format
+
+📓Note :  
+
+To obtain the repeat coordinate with RepeatMasker run the script `Repeats_detection.sh` (check for corresponding repo)
+
+Briefly, to get the repeat bed file from repeatmakser output :
+
+`cut -f5,6,7 'genome.fasta.out' >> Repeats.bed`
+`bedtools sort -i Repeats.bed >> Repeats_sorted.bed`
+`index bed file with GATK IndexFeatureFile -I repeats.bed`
+
+🛠 Methods :
 
 `sh VCF_tagging_all_chr.sh`
 
 📤 Outputs :
 
 - One gVCF with genotypes and quality tags 
+
 
 
 
