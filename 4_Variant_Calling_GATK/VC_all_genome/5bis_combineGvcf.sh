@@ -20,7 +20,7 @@ VCFs_File="/path_to/VCF_list.txt"
 Genome="PATH_TO/Genome.fasta" # index .fai and .dict have to be present in the same directory (see samtools faidx and gatk CreateSequenceDictionary functions)
 
 # Run GATK
-Gatk --java -jar CombineGVCFs \
+Gatk --java --java-options "-Xmx200g" -jar CombineGVCFs \
 -R ${Genome} \
 --variant ${VCFs_File} \
 # -L $CHR \ : if you want to do that by chromosome or on a subset
