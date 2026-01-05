@@ -10,7 +10,11 @@
 
 Create a gVCF file from all chr at once
 
-### 📂 Input (see details format in the sh script)
+Two options with GATK : CombineGVCF of DBimport
+
+### option 1 : DBIMPORT 
+
+📂 Input (see details format in the sh script)
 
 Fill the variables in the corresponding script : 
 
@@ -64,7 +68,10 @@ To get repeat.bed file from RepeatMasker output : run prealably in a separated s
 
 - A DB folder, no need to go get the insight of the folders
 
-*️⃣ Generate the gVCF
+### option 2 : CombineGVCF
+
+
+### Genrate the gvcf
 
 `sh Genotype_gvcf_all_Chr.sh`
 
@@ -79,5 +86,6 @@ To get repeat.bed file from RepeatMasker output : run prealably in a separated s
 📤 Outputs :
 
 - One gVCF with genotypes and quality tags 
+
 
 
