@@ -17,3 +17,7 @@ Input="/your/path/XXX.TAG.vcf.gz"
 #------------------------------------------------------------#
 
 bcftools view ${Input} -e 'FILTER~"MQFILTER|LowQual|Repeat" || TYPE="indel"' --threads 8 -Oz -o VCF.TAG.Flowqual_Noindels_Norepeat.vcf.gz
+
+# Example of filters on SNP (to keep snp only), missing data, and MAF and. To filter the DP and missing data along with custom vizualisation see the DP_Na_Filter R script.
+
+##TO DO
