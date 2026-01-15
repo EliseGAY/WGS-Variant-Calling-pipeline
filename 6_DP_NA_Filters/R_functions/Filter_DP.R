@@ -32,9 +32,11 @@ filter_vcf_by_dp <- function(vcf, min_dp_pos, max_dp_pos, min_dp_ind, max_dp_ind
   # Filter the VCF by ind
   filtered_vcf_ind <- vcf[, c("FORMAT", valid_inds)]
   
+  # Extract the depth of coverage (DP) in filtered VCF
+  dp_data_ind <- extract.gt(filtered_vcf_ind, element = 'DP', as.numeric = TRUE)
   
   # Calculate the mean DP for each position (rows)
-  mean_dp_pos <- rowMeans(dp_data, na.rm = TRUE)
+  mean_dp_pos <- rowMeans(dp_data_ind, na.rm = TRUE)
   
   # Filter positions based on the DP thresholds
   filtered_vcf_ind_pos <- filtered_vcf_ind[mean_dp_pos >= min_dp_pos & 
